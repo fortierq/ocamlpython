@@ -100,8 +100,12 @@ let rec expr ctx = function
   )
   (* booléens *)
   | Ecst (Cbool b) -> Vbool b
-  | Ebinop (Band, e1, e2) -> (match expr ctx e1, expr ctx e2 with
-    | Vbool b1, Vbool b2 -> Vbool (b1 && b2)
+  | Ebinop (Band, e1, e2) -> (match expr ctx e1 with
+    | Vbool b1 -> Vbool (b1 &&
+        match expr ctx e2 with 
+          | Vbool b2 -> b2
+          | _ -> error "unsupported operand type"
+          ) 
     | _ -> error "unsupported operand type"
   )
   | Ebinop (Bor, e1, e2) ->
@@ -115,29 +119,36 @@ let rec expr ctx = function
     | Vbool b -> Vbool (not b)
     | _ -> error "unsupported operand type"
   )
-  (* listes *)
+  | Epipe (e, f) ->  expr ctx (Ecall (f, [e]))  (* listes *)
   | Eident id ->
     Hashtbl.find ctx id
   (* appel de fonction *)
-  | Ecall ("len", [e1]) ->
-      assert false (* à compléter (question 5) *)
-  | Ecall ("list", [Ecall ("range", [e1])]) ->
-      assert false (* à compléter (question 5) *)
+  | Ecall ("len", [e1]) -> (match expr ctx e1 with
+    | Vlist l -> Vint (Array.length l)
+    | _ -> error "argument to len must be a list"
+  )
+  | Ecall ("range", [e1]) -> (match expr ctx e1 with
+    | Vint n -> Vlist (Array.init n (fun i -> Vint i))
+    | _ -> error "argument to range must be an integer"
+  )
   | Ecall (f, el) ->  (* à compléter (question 5) *)
       let fns = Hashtbl.find functions f in
       let (params, body) = fns in
       let ctx' = Hashtbl.copy ctx in (
       List.iter2 (fun p v -> Hashtbl.add ctx' p (expr ctx v)) params el;
-      try stmt ctx' body; assert false 
+      try stmt ctx' body; Vnone 
       with Return v -> v
       )
-  | Elist el ->
-      assert false (* à compléter (question 5) *)
-  | Eget (e1, e2) ->
-      assert false (* à compléter (question 5) *)
+  | Elist el -> Vlist (List.map (expr ctx) el |> Array.of_list)
+  | Eget (e1, e2) -> (match expr ctx e1 with
+    | Vlist l -> (match expr ctx e2 with
+        | Vint n -> l.(n)
+        | _ -> error "index must be integer"
+    )
+    | _ -> error "can not index"
+  )
 
 (* interprétation d'une instruction ; ne renvoie rien *)
-
 and stmt ctx = function
   | Seval e ->
       ignore (expr ctx e)
@@ -151,7 +162,10 @@ and stmt ctx = function
       Hashtbl.add ctx id (expr ctx e1)
   | Sreturn e -> raise (Return (expr ctx e))
   | Sfor (x, e, s) ->
-      assert false (* à compléter (question 5) *)
+      (match expr ctx e with
+        | Vlist l -> l
+        | _ -> error "for loop variable must be a list")
+      |> Array.iter (fun i -> Hashtbl.add ctx x i; stmt ctx s)
   | Sset (e1, e2, e3) ->
       assert false (* à compléter (question 5) *)
 

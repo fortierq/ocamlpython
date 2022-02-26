@@ -16,7 +16,7 @@ type constant =
   | Cnone
   | Cbool of bool
   | Cstring of string
-  | Cint of int (* en Python les entiers sont en réalité de précision
+  | Cint of int (* en Python les entiers sont en rï¿½alitï¿½ de prï¿½cision
                    arbitraire; on simplifie ici *)
 
 type expr =
@@ -27,6 +27,7 @@ type expr =
   | Ecall of ident * expr list
   | Elist of expr list
   | Eget of expr * expr (* e1[e2] *)
+  | Epipe of expr * ident (* e1 | f *)
 
 and stmt =
   | Sif of expr * stmt * stmt
