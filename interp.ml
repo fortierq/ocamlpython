@@ -89,7 +89,7 @@ let rec expr ctx = function
         | Bgt, _, _  -> Vbool (v1 > v2)
         | Bge, _, _  -> Vbool (v1 >= v2)
         | Badd, Vstring s1, Vstring s2 ->
-            assert false (* à compléter (question 3) *)
+          Vstring (s1 ^ s2)
         | Badd, Vlist l1, Vlist l2 ->
             assert false (* à compléter (question 5) *)
         | _ -> error "unsupported operand types"
@@ -117,7 +117,7 @@ let rec expr ctx = function
   )
   (* listes *)
   | Eident id ->
-      assert false (* à compléter (question 3) *)
+    Hashtbl.find ctx id
   (* appel de fonction *)
   | Ecall ("len", [e1]) ->
       assert false (* à compléter (question 5) *)
@@ -140,9 +140,9 @@ and stmt ctx = function
   | Sblock bl ->
       block ctx bl
   | Sif (e, s1, s2) ->
-      assert false (* à compléter (question 2) *)
+      if is_true (expr ctx e) then stmt ctx s1 else stmt ctx s2
   | Sassign (id, e1) ->
-      assert false (* à compléter (question 3) *)
+      Hashtbl.add ctx id (expr ctx e1)
   | Sreturn e ->
       assert false (* à compléter (question 4) *)
   | Sfor (x, e, s) ->

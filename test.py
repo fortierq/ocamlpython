@@ -1,3 +1,5 @@
-
-print(-41 + 4 > 93 or 3 == 2)
+x = "a" + "b"
+if x:
+    print("x is true")
+    print(x)
 
