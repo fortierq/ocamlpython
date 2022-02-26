@@ -12,6 +12,7 @@
 %token EOF
 %token LP RP LSQ RSQ COMMA EQUAL COLON BEGIN END NEWLINE
 %token PLUS MINUS TIMES DIV MOD
+%token PIPE
 
 /* Définitions des priorités et associativités des tokens */
 
@@ -62,6 +63,7 @@ expr:
     { Elist l }
 | LP e = expr RP
     { e }
+| e = expr PIPE f = ident { Epipe (e, f) }
 ;
 
 suite:
