@@ -1,1 +1,1 @@
-x = list(range([]))
+x = range([]))

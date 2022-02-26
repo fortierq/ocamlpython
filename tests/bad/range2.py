@@ -1,3 +1,3 @@
-x = list(range(7))
+x = range(7))
 print(x[7])
 

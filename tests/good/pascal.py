@@ -3,7 +3,7 @@
 
 def print_row(r, i):
     s = ""
-    for j in list(range(i+1)):
+    for j in range(i+1)):
         if r[j]:
             s = "*" + s
         else:
@@ -21,8 +21,8 @@ def compute_row(r, j):
 
 def main():
     h = 40
-    r = list(range(h+1))
-    for i in list(range(h)):
+    r = range(h+1))
+    for i in range(h)):
         r[i] = 0
         compute_row(r, i)
         print_row(r, i)

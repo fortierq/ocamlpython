@@ -1,2 +1,2 @@
-print(len(list(range(7))))
+print(len(range(7))))
 

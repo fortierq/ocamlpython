@@ -33,10 +33,10 @@ def main():
     ymin = of_int(-1)
     ymax = of_int(1)
     deltay = div(sub(ymax, ymin), of_int(steps))
-    for i in list(range(steps)):
+    for i in range(steps)):
         y = add(ymin, mul(of_int(i), deltay))
         s = ""
-        for j in list(range(2 * steps)):
+        for j in range(2 * steps)):
             x = add(xmin, mul(of_int(j), deltax))
             if inside(x, y): s = s + "0"
             else: s = s + "1"

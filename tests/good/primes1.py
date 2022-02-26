@@ -1,11 +1,11 @@
 def prefix(n, l):
-    r = list(range(n))
+    r = range(n))
     for i in r:
         r[i] = l[i]
     return r
 
 def range2(n1, n2):
-    r = list(range(n2 - n1 + 1))
+    r = range(n2 - n1 + 1))
     i = 0
     for x in r:
         r[i] = n1
