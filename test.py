@@ -1,5 +1,6 @@
-x = "a" + "b"
-if x:
-    print("x is true")
-    print(x)
 
+def fact(n):
+    if n == 1:
+        return 1
+    return n * fact(n - 1)
+print(fact(10))

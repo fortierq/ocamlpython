@@ -46,7 +46,7 @@ let is_false = function
     | Vnone | Vbool false | Vint 0 | Vstring "" -> true
     | _ -> false
 
-let is_true v = not (is_false v) (* à compléter (question 2) *)
+let is_true v = not (is_false v)
 
 (* Les fonctions sont ici uniquement globales *)
 
@@ -123,8 +123,14 @@ let rec expr ctx = function
       assert false (* à compléter (question 5) *)
   | Ecall ("list", [Ecall ("range", [e1])]) ->
       assert false (* à compléter (question 5) *)
-  | Ecall (f, el) ->
-      assert false (* à compléter (question 4) *)
+  | Ecall (f, el) ->  (* à compléter (question 5) *)
+      let fns = Hashtbl.find functions f in
+      let (params, body) = fns in
+      let ctx' = Hashtbl.copy ctx in (
+      List.iter2 (fun p v -> Hashtbl.add ctx' p (expr ctx v)) params el;
+      try stmt ctx' body; assert false 
+      with Return v -> v
+      )
   | Elist el ->
       assert false (* à compléter (question 5) *)
   | Eget (e1, e2) ->
@@ -143,8 +149,7 @@ and stmt ctx = function
       if is_true (expr ctx e) then stmt ctx s1 else stmt ctx s2
   | Sassign (id, e1) ->
       Hashtbl.add ctx id (expr ctx e1)
-  | Sreturn e ->
-      assert false (* à compléter (question 4) *)
+  | Sreturn e -> raise (Return (expr ctx e))
   | Sfor (x, e, s) ->
       assert false (* à compléter (question 5) *)
   | Sset (e1, e2, e3) ->
@@ -162,8 +167,10 @@ and block ctx = function
  *)
 
 let file (dl, s) =
-  (* à compléter (question 4) *)
+  List.iter (fun d ->
+    let (id, pl, s) = d in
+    Hashtbl.add functions id (pl, s)
+  ) dl;
   stmt (Hashtbl.create 16) s
-
 
 
