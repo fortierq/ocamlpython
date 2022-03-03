@@ -40,7 +40,6 @@ print(fib(10))
 ```
 
 - Pipe operator:
--
 ```python
 def sum(x, y):
     return x + y
