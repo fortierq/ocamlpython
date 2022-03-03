@@ -1,17 +1,14 @@
 
-all: minipython.exe
+all: build
 	dune exec ./minipython.exe test.py
 
-tests: minipython.exe
+tests: build
 	bash run-tests "dune exec ./minipython.exe"
 
-minipython.exe:
+build:
 	dune build minipython.exe
 
 clean:
 	dune clean
 
 .PHONY: all clean minipython.exe
-
-
-
