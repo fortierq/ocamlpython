@@ -119,7 +119,7 @@ let rec expr ctx = function
     | Vbool b -> Vbool (not b)
     | _ -> error "unsupported operand type"
   )
-  | Epipe (e, f) ->  expr ctx (Ecall (f, [e]))  (* listes *)
+  | Epipe (e, f) -> expr ctx (Ecall (f, match e with Elist el -> el | _ -> [e]))
   | Eident id ->
     Hashtbl.find ctx id
   (* appel de fonction *)
