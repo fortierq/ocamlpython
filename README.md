@@ -5,7 +5,7 @@ Minimal Python implementation with OCaml + Lex + Menhir
 - OCaml
 - Dune
 - OCamllex
-- menhir
+- Menhir
 
 ## Build
 
